@@ -7,7 +7,7 @@ def chebPts(n):
         x[i] = np.cos((i*np.pi)/(n-1))
     return x
 
-def chebdiffmat(n):
+def chebDiffMat(n):
     ''' Returns an nxn differentiation matrix for chebyshev points, using
     forward difference at the end points and centered difference for the interior
     points '''
