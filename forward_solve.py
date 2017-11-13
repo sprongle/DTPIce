@@ -17,7 +17,7 @@ def iceFlow(h, diff_mat, di, tl = 0, a = [], bedrock = []):
 
 def forwardStep(h, diff_mat, di, dt, func_in = iceFlow, a_in = [], bedrock_in = [], tl_in = 0):
     ''' Simple forward-euler timestepping scheme '''
-    return dt*func_in(h,diff_mat,di,a=a_in,bedrock=bedrock_in, tl = tl_in)
+    return h + dt*func_in(h,diff_mat,di,a=a_in,bedrock=bedrock_in, tl = tl_in)
 
 def integrateForward(dt,di,h_grid_in,N):
     ''' Integrating forward-euler timestepping scheme for N iterations'''
@@ -37,4 +37,8 @@ n = 1000
 di = DaConstant(3.15*(10**8),100000,1000,2.6*(10**13))
 h = np.linspace(1,0.001,n)
 h_grid_init = cheb.ChebGrid(n,data_in = h)
-t, saved_h = integrateForward(0.000001,di,h_grid_init,500)
+h_grid_init.diff_mat[[0,-1],:] = 0
+t, saved_h = integrateForward(0.0001,di,h_grid_init,500)
+print(saved_h[3,:])
+plt.plot(h_grid_init.x_pts[::-1],saved_h[-1,:])
+plt.show()
