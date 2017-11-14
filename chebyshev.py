@@ -33,17 +33,23 @@ def chebDiffMat(n):
 
     return diff_mat
 
-class ChebGrid():
+class ChebGrid(object):
     '''Defines a grid of n Chebyshev points, self.xPts between x=0 and x=1,
     which comes with a differentiation matrix self.xDiff which can be applied to
     h to get a gradient dh/dx'''
 
-    def __init__(self, n):
+    def __init__(self, n, b = [], data_in = []):
         self.x_pts = chebPts(n)
-        self.data = np.zeros(n)
-        self.n_pts = n
+        if data_in.any():
+            self.data = data_in
+        else:
+            self.data = np.zeros(n)
         self.diff_mat = chebDiffMat(n)
         self.x_deriv = self.diffSelf()
+        if b and np.shape(b)[0] == n:
+            self.bedrock = b
+        else:
+            self.bedrock = np.zeros(n)
 
     def diffSelf(self):
         ''' Applies the Chebyshev differentiation matrix to the data held in self.data
